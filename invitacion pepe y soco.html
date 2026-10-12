@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pepe & Soco — Nos Casamos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PALETA — cambia estos valores para personalizar el tema
+     ============================================================ */
+  :root{
+    --crema:#f7f1e6;
+    --crema-oscuro:#ece2cc;
+    --dorado:#a9863f;
+    --dorado-claro:#c9a75f;
+    --cafe:#4a3c28;
+    --texto:#3a3226;
+    --verde-hoja:#7d8a5f;
+    --font-script:'Great Vibes', cursive;
+    --font-display:'Cormorant Garamond', serif;
+    --font-body:'EB Garamond', serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--crema);
+    color:var(--texto);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  img, video, svg{ display:block; max-width:100%; height:auto; }
+  h1,h2,h3{ font-family:var(--font-display); font-weight:500; }
+  ::selection{ background:var(--dorado-claro); color:#fff; }
+
+  body.bloqueado{ overflow:hidden; height:100vh; }
+
+  /* ============================================================
+     PANTALLA DEL SOBRE (portada inicial)
+     ============================================================ */
+  .pantalla-sobre{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,241,230,0.97));
+    transition:opacity 1s ease, visibility 1s ease;
+    overflow:hidden;
+  }
+  .pantalla-sobre::before,
+  .pantalla-sobre::after{
+    content:'';
+    position:absolute;
+    width:220px; height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.18) 42%, transparent 72%);
+    filter:blur(1px);
+  }
+  .pantalla-sobre::before{ left:8%; top:15%; }
+  .pantalla-sobre::after{ right:11%; bottom:18%; }
+  .pantalla-sobre .flor-fondo,
+  .pantalla-sobre .flor-fondo-2{
+    position:absolute;
+    width:140px; height:140px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle, rgba(255,255,255,0.96) 0 18%, rgba(255,255,255,0.18) 18% 30%, transparent 31%),
+      radial-gradient(circle at 50% 50%, rgba(201,167,95,0.18) 0 50%, transparent 51%);
+    box-shadow:
+      0 0 0 12px rgba(255,255,255,0.06),
+      0 0 0 22px rgba(201,167,95,0.04);
+    opacity:0.9;
+    pointer-events:none;
+  }
+  .pantalla-sobre .flor-fondo{ left:18%; top:16%; }
+  .pantalla-sobre .flor-fondo-2{ right:18%; bottom:18%; }
+  .pantalla-sobre.oculta{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  .sobre-titulo-arriba{
+    position:absolute;
+    top:7%;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    font-family:var(--font-body);
+    font-size:1rem;
+    letter-spacing:0.24em;
+    color:var(--dorado);
+    text-transform:uppercase;
+  }
+
+  .sobre{
+    position:relative;
+    width:min(92vw, 700px);
+    aspect-ratio:1.7/1;
+    cursor:pointer;
+    filter:drop-shadow(0 38px 52px rgba(74,60,40,0.16));
+  }
+
+  .sobre-cuerpo{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(160deg,#fffdf9,#f0e6d2);
+    border:1px solid rgba(169,134,63,0.4);
+    box-shadow:0 20px 30px -20px rgba(74,60,40,0.28);
+    border-radius:3px;
+  }
+
+  .sobre-solapa-fondo{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:62%;
+    background:linear-gradient(160deg,#efe4cd,#e6d8ba);
+    clip-path:polygon(0 0, 100% 0, 50% 68%);
+    z-index:1;
+  }
+
+  .sobre-carta{
+    position:absolute;
+    left:8%;
+    right:8%;
+    top:10%;
+    height:82%;
+    background:#fffdf8;
+    border:1px solid rgba(169,134,63,0.25);
+    box-shadow:0 10px 25px -10px rgba(74,60,40,0.18);
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0.3rem;
+    padding:1rem;
+    transition:transform 1.1s cubic-bezier(.22,.9,.34,1), opacity 1s ease;
+  }
+  .sobre-carta .carta-eyebrow{
+    font-size:0.7rem;
+    letter-spacing:0.22em;
+    color:var(--dorado);
+    text-transform:uppercase;
+  }
+  .sobre-carta .carta-nombres{
+    font-family:var(--font-script);
+    font-size:clamp(2.6rem,8vw,4rem);
+    color:var(--cafe);
+    line-height:1;
+    letter-spacing:0.02em;
+  }
+  .sobre-carta .carta-subtitulo{
+    font-family:var(--font-display);
+    font-size:1rem;
+    letter-spacing:0.18em;
+    color:var(--cafe);
+    text-transform:uppercase;
+    text-align:center;
+  }
+
+  .sobre-solapa{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:62%;
+    background:linear-gradient(160deg,#fffdf9,#f2e8d4);
+    clip-path:polygon(0 0, 100% 0, 50% 68%);
+    transform-origin:top center;
+    transition:transform 1s cubic-bezier(.6,.1,.3,1);
+    z-index:3;
+    border-top:1px solid rgba(169,134,63,0.2);
+  }
+
+  .sello{
+    position:absolute;
+    top:38%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--dorado-claro), var(--dorado) 70%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--font-script);
+    font-size:1.3rem;
+    color:#fff8ec;
+    box-shadow:0 6px 14px -4px rgba(74,60,40,0.5);
+    z-index:4;
+    transition:opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .sobre-frente-texto{
+    position:absolute;
+    bottom:14%;
+    left:0; right:0;
+    text-align:center;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--cafe);
+    z-index:2;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+
+  .sobre-indicacion{
+    position:absolute;
+    bottom:-13%;
+    left:0; right:0;
+    text-align:center;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    color:var(--dorado);
+    animation:pulso 2s ease-in-out infinite;
+  }
+  @keyframes pulso{
+    0%,100%{ opacity:0.5; }
+    50%{ opacity:1; }
+  }
+
+  /* flores decorativas del sobre (CSS, sin imágenes) */
+  .flor-esquina{
+    position:absolute;
+    width:90px;
+    height:90px;
+    z-index:5;
+    pointer-events:none;
+  }
+  .flor-esquina.tl{ top:-22px; left:-24px; transform:rotate(-10deg); }
+  .flor-esquina.br{ bottom:-24px; right:-24px; transform:rotate(170deg); }
+
+  .petalo{
+    position:absolute;
+    width:26px;
+    height:18px;
+    background:#fff;
+    border:1px solid #ece0c8;
+    border-radius:70% 30% 70% 30%;
+  }
+  .hoja-css{
+    position:absolute;
+    width:30px;
+    height:12px;
+    background:var(--verde-hoja);
+    border-radius:70% 30% 70% 30%;
+    opacity:0.85;
+  }
+
+  /* ESTADO: sobre abierto */
+  .sobre.abierto .sobre-solapa{ transform:rotateX(180deg); }
+  .sobre.abierto .sello{ opacity:0; transform:translate(-50%,-50%) scale(0.4); }
+  .sobre.abierto .sobre-carta{ transform:translateY(-135%); }
+  .sobre.abierto .sobre-indicacion{ opacity:0; }
+
+  /* ============================================================
+     FONDO ANIMADO — degradado en movimiento + pétalos flotantes
+     ============================================================ */
+  .fondo-textura{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(169,134,63,0.10), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(169,134,63,0.10), transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(201,167,95,0.08), transparent 55%),
+      var(--crema);
+    background-size:200% 200%, 200% 200%, 250% 250%, 100% 100%;
+    animation:none;
+    pointer-events:none;
+  }
+  .fondo-textura::before,
+  .fondo-textura::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-repeat:no-repeat;
+    background-size:260px auto;
+    opacity:0.18;
+    pointer-events:none;
+  }
+  .fondo-textura::before{
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(169,134,63,0.9) 0 12%, transparent 12.5%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.9) 0 7%, transparent 7.5%),
+      radial-gradient(circle at 50% 50%, rgba(169,134,63,0.8) 0 10%, transparent 10.5%);
+    background-position:12% 18%, 68% 30%, 48% 76%;
+  }
+  .fondo-textura::after{
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(169,134,63,0.9) 0 11%, transparent 11.5%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 0 7%, transparent 7.5%),
+      radial-gradient(circle at 50% 50%, rgba(169,134,63,0.8) 0 10%, transparent 10.5%);
+    background-position:32% 82%, 82% 68%, 18% 52%;
+  }
+  @keyframes derivaFondo{
+    0%{ background-position:0% 0%, 100% 100%, 50% 50%, 0 0; }
+    50%{ background-position:60% 40%, 40% 60%, 60% 40%, 0 0; }
+    100%{ background-position:0% 0%, 100% 100%, 50% 50%, 0 0; }
+  }
+
+  .particulas-fondo{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .particula{
+    position:absolute;
+    top:-12vh;
+    border-radius:72% 28% 68% 32% / 58% 42% 58% 42%;
+    background:linear-gradient(135deg, rgba(255,255,255,0.94), rgba(201,167,95,0.88), rgba(169,134,63,0.9));
+    opacity:0.44;
+    box-shadow:0 0 12px rgba(201,167,95,0.28);
+    animation:caerParticula var(--dur,18s) linear infinite;
+    animation-delay:var(--delay,0s);
+  }
+  .particula.chispa{
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.9), rgba(201,167,95,0.9));
+    box-shadow:0 0 8px 1px rgba(201,167,95,0.7);
+    animation:caerChispa var(--dur,16s) linear infinite;
+    animation-delay:var(--delay,0s);
+  }
+  @keyframes caerParticula{
+    0%{ transform:translateY(-8vh) translateX(0) rotate(0deg) scale(0.8); opacity:0; }
+    12%{ opacity:0.55; }
+    50%{ transform:translateY(48vh) translateX(30px) rotate(140deg) scale(1); }
+    100%{ transform:translateY(110vh) translateX(70px) rotate(260deg) scale(0.9); opacity:0; }
+  }
+  @keyframes caerChispa{
+    0%{ transform:translateY(-10vh) translateX(0) scale(0.6); opacity:0; }
+    15%{ opacity:0.75; }
+    100%{ transform:translateY(110vh) translateX(40px) scale(1.1); opacity:0; }
+  }
+
+  /* ============================================================
+     CONTENIDO PRINCIPAL
+     ============================================================ */
+  main{ position:relative; z-index:1; }
+
+  section{
+    padding:5.5rem 1.5rem;
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  .marco-dorado{
+    border:1px solid rgba(169,134,63,0.8);
+    padding:3rem 1.5rem;
+    position:relative;
+    background:rgba(255,255,255,0.16);
+    backdrop-filter:blur(1px);
+  }
+  .marco-dorado::before, .marco-dorado::after{
+    content:'';
+    position:absolute;
+    width:14px; height:14px;
+    border:1px solid var(--dorado);
+  }
+  .marco-dorado::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .marco-dorado::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  .eyebrow{
+    font-size:0.75rem;
+    letter-spacing:0.3em;
+    color:var(--dorado);
+    margin-bottom:0.8rem;
+  }
+
+  .foto-hero{
+    position:relative;
+    max-width:980px;
+    margin:0 auto 3rem;
+    padding:0;
+    background:transparent;
+    border:none;
+    box-shadow:none;
+    animation:none;
+  }
+  .foto-hero img{
+    display:block;
+    width:100%;
+    height:auto;
+    max-height:780px;
+    object-fit:contain;
+    filter:saturate(0.95) contrast(1.08) brightness(0.98);
+    background:transparent;
+  }
+
+  .galeria-fotos{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:2.2rem;
+    margin:2.2rem auto 0;
+    max-width:1060px;
+  }
+  .foto-item img{
+    height:500px;
+  }
+  @media (max-width:700px){
+    .galeria-fotos{ grid-template-columns:1fr; }
+    .foto-item img{ height:300px; }
+    .foto-hero{ margin-bottom:2rem; }
+    .sobre{ width:min(74vw, 300px); }
+  }
+  .foto-item{
+    position:relative;
+    overflow:hidden;
+    border:none;
+    background:transparent;
+    box-shadow:none;
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .foto-item:hover{
+    transform:translateY(-4px);
+    box-shadow:0 24px 40px -24px rgba(74,60,40,0.55);
+  }
+  .foto-item img{
+    display:block;
+    width:100%;
+    height:380px;
+    object-fit:contain;
+    filter:saturate(0.9) contrast(1.06);
+    background:transparent;
+  }
+
+  @keyframes flotarFoto{
+    0%,100%{ transform:translateY(0px); }
+    50%{ transform:translateY(-8px); }
+  }
+
+  .hero-inner h1{
+    font-family:var(--font-script);
+    font-size:clamp(4rem,12vw,6.2rem);
+    color:var(--cafe);
+    line-height:1.05;
+  }
+  .hero-inner .amp{
+    display:block;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:2rem;
+    color:var(--dorado);
+    margin:0.2rem 0;
+  }
+  .hero-inner .fecha-grande{
+    margin-top:1.6rem;
+    font-size:1.5rem;
+    letter-spacing:0.12em;
+    color:var(--texto);
+  }
+  .hero-inner .lugar-chica{
+    margin-top:0.5rem;
+    font-size:1rem;
+    color:var(--dorado);
+    letter-spacing:0.1em;
+  }
+
+  hr.divisor{
+    width:70px;
+    border:none;
+    border-top:1px solid var(--dorado);
+    margin:1.6rem auto;
+  }
+
+  .revelar{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity 0.9s ease, transform 0.9s ease;
+  }
+  .revelar.visible{ opacity:1; transform:translateY(0); }
+
+  .titulo-seccion{
+    font-size:clamp(2rem,5vw,2.8rem);
+    color:var(--cafe);
+    margin-bottom:0.4rem;
+  }
+
+  /* ============================================================
+     CUENTA REGRESIVA
+     ============================================================ */
+  .cuenta-regresiva{
+    display:flex;
+    justify-content:center;
+    gap:1rem;
+    flex-wrap:wrap;
+    margin-top:2.2rem;
+  }
+  .cr-caja{
+    background:#fffdf8;
+    border:1px solid var(--crema-oscuro);
+    padding:1.1rem 1rem;
+    min-width:85px;
+    box-shadow:0 12px 24px -18px rgba(74,60,40,0.5);
+    transition:transform 0.3s ease;
+  }
+  .cr-caja:hover{ transform:translateY(-5px); }
+  .cr-numero{
+    font-family:var(--font-display);
+    font-size:2.2rem;
+    color:var(--cafe);
+    font-variant-numeric:tabular-nums;
+  }
+  .cr-texto{
+    font-size:0.65rem;
+    letter-spacing:0.12em;
+    color:var(--dorado);
+    text-transform:uppercase;
+    margin-top:0.2rem;
+  }
+
+  /* ============================================================
+     TOCADISCOS — "Mi Linda Esposa"
+     ============================================================ */
+  .tocadiscos-caja{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.2rem;
+    margin-top:1.5rem;
+  }
+
+  .tocadiscos{
+    position:relative;
+    width:230px;
+    height:230px;
+  }
+
+  .base-tocadiscos{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #6b5a3d, #3a2f1e 75%);
+    box-shadow:0 20px 40px -18px rgba(0,0,0,0.5);
+  }
+
+  .disco{
+    position:absolute;
+    top:8%; left:8%; right:8%; bottom:8%;
+    border-radius:50%;
+    background:
+      repeating-radial-gradient(circle, #111 0px, #111 2px, #1c1c1c 3px, #111 4px);
+    box-shadow:inset 0 0 20px rgba(0,0,0,0.6);
+    animation:girar 6s linear infinite paused;
+  }
+  .disco.girando{ animation-play-state:running; }
+
+  .etiqueta-disco{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:38%;
+    height:38%;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--dorado-claro), var(--dorado));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:0.62rem;
+    color:#fff8ec;
+    line-height:1.2;
+    padding:0.3rem;
+  }
+  .etiqueta-disco::after{
+    content:'';
+    position:absolute;
+    width:6px; height:6px;
+    background:#3a2f1e;
+    border-radius:50%;
+  }
+
+  .brazo-tocadiscos{
+    position:absolute;
+    top:2%;
+    right:4%;
+    width:110px;
+    height:6px;
+    transform-origin:100% 50%;
+    transform:rotate(-28deg);
+    transition:transform 0.6s ease;
+    z-index:5;
+  }
+  .brazo-tocadiscos::before{
+    content:'';
+    position:absolute;
+    left:0; top:-3px;
+    width:12px; height:12px;
+    background:var(--dorado-claro);
+    border-radius:50%;
+  }
+  .brazo-tocadiscos::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:#d8c79a;
+    border-radius:3px;
+  }
+  .base-brazo{
+    position:absolute;
+    top:1%;
+    right:2%;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#2b2318;
+    z-index:6;
+  }
+  .tocadiscos.reproduciendo .brazo-tocadiscos{ transform:rotate(2deg); }
+
+  .btn-reproducir{
+    background:var(--cafe);
+    color:#fff8ec;
+    border:none;
+    padding:0.7rem 1.8rem;
+    font-family:var(--font-body);
+    font-size:0.85rem;
+    letter-spacing:0.1em;
+    cursor:pointer;
+    border-radius:30px;
+    transition:background 0.3s ease, transform 0.2s ease;
+  }
+  .btn-reproducir:hover{ background:var(--dorado); transform:translateY(-2px); }
+
+  .cancion-titulo{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--cafe);
+  }
+  .cancion-nota{
+    font-size:0.75rem;
+    color:#8a7d63;
+    max-width:320px;
+  }
+
+  /* ============================================================
+     DETALLES DEL EVENTO
+     ============================================================ */
+  .detalles-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2rem;
+    margin-top:2.5rem;
+    text-align:left;
+  }
+  @media (max-width:600px){
+    .detalles-grid{ grid-template-columns:1fr; }
+  }
+  .detalle-item{
+    border-left:2px solid var(--dorado-claro);
+    padding-left:1.2rem;
+  }
+  .detalle-hora{
+    font-family:var(--font-display);
+    font-size:2.6rem;
+    color:var(--dorado);
+    line-height:1;
+  }
+  .detalle-titulo{
+    font-size:1.6rem;
+    font-family:var(--font-display);
+    color:var(--cafe);
+    margin:0.3rem 0 0.2rem;
+  }
+  .detalle-texto{
+    font-size:1.08rem;
+    color:var(--texto);
+    line-height:1.7;
+  }
+  .detalle-texto small{
+    display:block;
+    color:#8a7d63;
+    margin-top:0.2rem;
+    font-style:italic;
+  }
+
+  /* ============================================================
+     PADRINOS
+     ============================================================ */
+  .padrinos-caja{
+    display:inline-block;
+    padding:1.6rem 2.6rem;
+    border:1px solid var(--dorado-claro);
+    margin-top:1.5rem;
+  }
+  .padrinos-nombres{
+    font-family:var(--font-script);
+    font-size:1.8rem;
+    color:var(--cafe);
+  }
+
+  /* ============================================================
+     RSVP
+     ============================================================ */
+  .rsvp-caja{
+    background:var(--cafe);
+    color:var(--crema);
+    padding:3.5rem 2rem;
+    border-radius:2px;
+  }
+  .rsvp-caja .eyebrow{ color:var(--dorado-claro); }
+  .rsvp-caja .titulo-seccion{ color:var(--crema); }
+
+  form{
+    max-width:420px;
+    margin:2rem auto 0;
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+    text-align:left;
+  }
+  .campo{ display:flex; flex-direction:column; gap:0.4rem; }
+  .campo label{ font-size:0.8rem; letter-spacing:0.05em; color:#e8dcc4; }
+  .campo input, .campo select{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.3);
+    padding:0.7rem 0.9rem;
+    color:#fff;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    border-radius:3px;
+  }
+  .campo input::placeholder{ color:rgba(255,255,255,0.45); }
+  .campo input:focus, .campo select:focus{ outline:none; border-color:var(--dorado-claro); }
+
+  .opciones-asistencia{ display:flex; gap:0.8rem; }
+  .opcion-btn{
+    flex:1;
+    padding:0.7rem;
+    border-radius:3px;
+    border:1px solid rgba(255,255,255,0.3);
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    font-size:0.85rem;
+    transition:all 0.25s ease;
+  }
+  .opcion-btn.activa{ background:var(--dorado-claro); border-color:var(--dorado-claro); color:#3a2f1e; }
+
+  .btn-enviar{
+    margin-top:0.4rem;
+    background:var(--dorado-claro);
+    color:#3a2f1e;
+    border:none;
+    padding:0.85rem;
+    border-radius:3px;
+    font-size:0.9rem;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.3s ease;
+  }
+  .btn-enviar:hover{ background:#e0c98a; transform:translateY(-2px); }
+
+  .mensaje-confirmado{ display:none; text-align:center; padding:1.5rem 1rem; }
+  .mensaje-confirmado.visible{ display:block; }
+  .check-circulo{
+    width:56px; height:56px; border-radius:50%;
+    border:2px solid var(--dorado-claro);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 1rem; font-size:1.4rem;
+  }
+
+  footer{
+    text-align:center;
+    padding:3.5rem 1.5rem;
+    position:relative;
+    z-index:1;
+  }
+  footer .monograma-final{
+    font-family:var(--font-script);
+    font-size:2rem;
+    color:var(--dorado);
+  }
+  footer p{
+    font-size:0.75rem;
+    color:#8a7d63;
+    letter-spacing:0.1em;
+    margin-top:0.4rem;
+  }
+
+  @keyframes girar{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body class="bloqueado">
+
+<!-- ============================================================
+     PANTALLA DEL SOBRE — clic para abrir
+     ============================================================ -->
+<div class="pantalla-sobre" id="pantallaSobre">
+  <div class="flor-fondo"></div>
+  <div class="flor-fondo-2"></div>
+  <div class="sobre-titulo-arriba">RENOVACIÓN DE VOTOS</div>
+  <div class="sobre" id="sobre">
+    <div class="sobre-cuerpo"></div>
+    <div class="sobre-solapa-fondo"></div>
+
+    <div class="sobre-carta">
+      <div class="carta-eyebrow">50 AÑOS DE MATRIMONIO</div>
+      <div class="carta-nombres">Pepe &amp; Soco</div>
+      <div class="carta-subtitulo">RENOVACIÓN DE VOTOS</div>
+    </div>
+
+    <div class="sobre-solapa">
+      <div class="flor-esquina tl">
+        <div class="hoja-css" style="top:30px; left:0; transform:rotate(20deg);"></div>
+        <div class="hoja-css" style="top:40px; left:15px; transform:rotate(-10deg);"></div>
+        <div class="petalo" style="top:20px; left:10px;"></div>
+        <div class="petalo" style="top:15px; left:28px; transform:rotate(30deg);"></div>
+        <div class="petalo" style="top:32px; left:30px; transform:rotate(-20deg);"></div>
+      </div>
+    </div>
+
+    <div class="sello">P&amp;S</div>
+    <div class="sobre-frente-texto">50 AÑOS DE MATRIMONIO</div>
+    <div class="sobre-indicacion">TOCA EL SOBRE PARA ABRIR ✦</div>
+  </div>
+</div>
+
+<div class="fondo-textura"></div>
+<div class="particulas-fondo" id="particulasFondo"></div>
+
+<main>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section>
+    <div class="marco-dorado hero-inner">
+      <div class="eyebrow">RENOVACIÓN DE VOTOS</div>
+      <h1>Pepe<span class="amp">&amp;</span>Soco</h1>
+      <div class="fecha-grande">50 AÑOS DE MATRIMONIO</div>
+      <div class="lugar-chica">27 DE FEBRERO DE 2027 • CATEDRAL DE SAN CRISTÓBAL LA NUEVA</div>
+    </div>
+
+    <div class="foto-hero revelar">
+      <img src="imagen 1.jpeg" alt="Pepe y Soco" />
+    </div>
+
+    <div class="eyebrow revelar" style="margin-top:0.5rem;">NUESTRA HISTORIA</div>
+    <p class="revelar" style="max-width:760px; margin:0 auto 1.6rem; font-size:1.45rem; font-style:italic; color:var(--cafe); line-height:1.7; letter-spacing:0.02em;">
+      “Con alegría y gratitud, les invitamos a celebrar la renovación de votos de sus 50 años de matrimonio, un testimonio de amor, fe y compromiso.”
+    </p>
+
+    <div class="galeria-fotos revelar">
+      <div class="foto-item">
+        <img src="imagen 2.jpeg" alt="Foto de pareja 2" />
+      </div>
+      <div class="foto-item">
+        <img src="imagen 3.jpeg" alt="Foto de pareja 3" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CUENTA REGRESIVA
+       ============================================================ -->
+  <section>
+    <div class="eyebrow revelar">FALTA POCO</div>
+    <h2 class="titulo-seccion revelar">Cuenta regresiva</h2>
+    <hr class="divisor revelar">
+    <div class="cuenta-regresiva revelar">
+      <div class="cr-caja"><div class="cr-numero" id="cr-dias">00</div><div class="cr-texto">Días</div></div>
+      <div class="cr-caja"><div class="cr-numero" id="cr-horas">00</div><div class="cr-texto">Horas</div></div>
+      <div class="cr-caja"><div class="cr-numero" id="cr-min">00</div><div class="cr-texto">Min</div></div>
+      <div class="cr-caja"><div class="cr-numero" id="cr-seg">00</div><div class="cr-texto">Seg</div></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TOCADISCOS — "Como han pasado los años"
+       ============================================================ -->
+  <section>
+    <div class="eyebrow revelar">NUESTRA CANCIÓN</div>
+    <h2 class="titulo-seccion revelar">Como han pasado los años</h2>
+    <hr class="divisor revelar">
+    <div class="tocadiscos-caja revelar">
+      <div class="tocadiscos" id="tocadiscos">
+        <div class="base-tocadiscos"></div>
+        <div class="disco" id="disco">
+          <div class="etiqueta-disco">Como han pasado<br>los años</div>
+        </div>
+        <div class="base-brazo"></div>
+        <div class="brazo-tocadiscos"></div>
+      </div>
+      <div class="cancion-titulo">"Como han pasado los años"</div>
+      <button class="btn-reproducir" id="btnReproducir">▶ REPRODUCIR</button>
+      <audio id="audioCancion" preload="auto">
+        <source src="./MI%20LINDA%20ESPOSA.mp4" type="audio/mp4">
+      </audio>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DETALLES DEL EVENTO
+       ============================================================ -->
+  <section>
+    <div class="eyebrow revelar">EL GRAN DÍA</div>
+    <h2 class="titulo-seccion revelar">Detalles</h2>
+    <hr class="divisor revelar">
+    <div class="detalles-grid">
+      <div class="detalle-item revelar">
+        <div class="detalle-hora">6:00 PM</div>
+        <div class="detalle-titulo">Misa</div>
+        <div class="detalle-texto">
+          Catedral de San Cristóbal La Nueva
+          <small><a href="https://maps.app.goo.gl/YsNE2dknGw4jppxN8" target="_blank" rel="noopener">Ver ubicación de la iglesia</a></small>
+        </div>
+      </div>
+      <div class="detalle-item revelar">
+        <div class="detalle-hora">7:30 PM</div>
+        <div class="detalle-titulo">Recepción</div>
+        <div class="detalle-texto">
+          Salón Orian — Salón El Sol
+          <small><a href="https://share.google/zVcmUYDv6d7IfzhPD" target="_blank" rel="noopener">Ver ubicación del salón</a></small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PADRINOS
+       ============================================================ -->
+  <section>
+    <div class="eyebrow revelar">CON CARIÑO NOS ACOMPAÑAN</div>
+    <h2 class="titulo-seccion revelar">Padrinos</h2>
+    <hr class="divisor revelar">
+    <div class="padrinos-caja revelar">
+      <div class="padrinos-nombres">JOSE Y BERENICE</div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       RSVP
+       ============================================================ -->
+  <section>
+    <div class="rsvp-caja revelar">
+      <div class="eyebrow">TU RESPUESTA ES IMPORTANTE</div>
+      <h2 class="titulo-seccion">Confirma tu asistencia</h2>
+      <hr class="divisor" style="border-color:var(--dorado-claro);">
+
+      <form id="formRSVP">
+        <div class="campo">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" placeholder="¿Cómo te llamas?" required>
+        </div>
+        <div class="campo">
+          <label>¿Nos acompañas?</label>
+          <div class="opciones-asistencia">
+            <button type="button" class="opcion-btn" data-valor="si">Sí, ahí estaré</button>
+            <button type="button" class="opcion-btn" data-valor="no">No podré ir</button>
+          </div>
+          <input type="hidden" id="asistencia" required>
+        </div>
+        <div class="campo">
+          <label for="acompanantes">¿Cuántas personas asistirán?</label>
+          <input type="number" id="acompanantes" min="0" max="10" placeholder="Ej. 2" required>
+        </div>
+        <div class="campo">
+          <label for="mensaje">Mensaje para Pepe y Soco (opcional)</label>
+          <input type="text" id="mensaje" placeholder="Déjales unas palabras">
+        </div>
+        <p style="margin-top:-0.2rem; font-size:0.8rem; color:#e8dcc4;">
+          La confirmación se enviará directamente al WhatsApp de la pareja.
+        </p>
+        <button type="submit" class="btn-enviar">Confirmar por WhatsApp</button>
+      </form>
+
+      <div class="mensaje-confirmado" id="mensajeConfirmado">
+        <div class="check-circulo">✓</div>
+        <h3 style="color:var(--crema); margin-bottom:0.4rem;">¡Gracias!</h3>
+        <p style="font-size:0.85rem; color:#e8dcc4;">Tu respuesta fue registrada. ¡Nos vemos en la boda!</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="monograma-final">Pepe &amp; Soco</div>
+    <p>27 DE FEBRERO DE 2027</p>
+  </footer>
+
+</main>
+
+<script>
+  /* ============================================================
+     0) FONDO ANIMADO — generar pétalos y chispas doradas flotando
+     ============================================================ */
+  const contenedorParticulas = document.getElementById('particulasFondo');
+  const totalParticulas = 54;
+  for(let i=0;i<totalParticulas;i++){
+    const p = document.createElement('div');
+    const esChispa = Math.random() < 0.5;
+    p.className = 'particula' + (esChispa ? ' chispa' : '');
+    const tam = esChispa ? (3 + Math.random()*5) : (12 + Math.random()*18);
+    p.style.width = tam+'px';
+    p.style.height = esChispa ? tam+'px' : (tam*0.78)+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.setProperty('--dur', (14 + Math.random()*20)+'s');
+    p.style.setProperty('--delay', (Math.random()*-35)+'s');
+    contenedorParticulas.appendChild(p);
+  }
+
+  /* ============================================================
+     1) ABRIR EL SOBRE
+     ============================================================ */
+  const sobre = document.getElementById('sobre');
+  const pantallaSobre = document.getElementById('pantallaSobre');
+  const btnReproducir = document.getElementById('btnReproducir');
+  const disco = document.getElementById('disco');
+  const tocadiscos = document.getElementById('tocadiscos');
+  const audioCancion = document.getElementById('audioCancion');
+
+  sobre.addEventListener('click', function(){
+    if(sobre.classList.contains('abierto')) return;
+    sobre.classList.add('abierto');
+
+    if(audioCancion){
+      audioCancion.currentTime = 0;
+      audioCancion.play().catch(()=>{});
+      disco.classList.add('girando');
+      tocadiscos.classList.add('reproduciendo');
+      btnReproducir.textContent = '❚❚ PAUSAR';
+    }
+
+    setTimeout(()=>{
+      pantallaSobre.classList.add('oculta');
+      document.body.classList.remove('bloqueado');
+    }, 1300);
+  });
+
+  /* ============================================================
+     2) CUENTA REGRESIVA — cambia la fecha objetivo aquí
+     ============================================================ */
+  const fechaBoda = new Date('2027-02-27T18:00:00');
+
+  function actualizarCuentaRegresiva(){
+    const ahora = new Date();
+    let diferencia = fechaBoda - ahora;
+    if(diferencia < 0) diferencia = 0;
+    const dias = Math.floor(diferencia / (1000*60*60*24));
+    const horas = Math.floor((diferencia / (1000*60*60)) % 24);
+    const minutos = Math.floor((diferencia / (1000*60)) % 60);
+    const segundos = Math.floor((diferencia / 1000) % 60);
+    document.getElementById('cr-dias').textContent = String(dias).padStart(2,'0');
+    document.getElementById('cr-horas').textContent = String(horas).padStart(2,'0');
+    document.getElementById('cr-min').textContent = String(minutos).padStart(2,'0');
+    document.getElementById('cr-seg').textContent = String(segundos).padStart(2,'0');
+  }
+  actualizarCuentaRegresiva();
+  setInterval(actualizarCuentaRegresiva, 1000);
+
+  /* ============================================================
+     3) REVELADO AL HACER SCROLL
+     ============================================================ */
+  const elementosRevelar = document.querySelectorAll('.revelar');
+  const observador = new IntersectionObserver((entradas)=>{
+    entradas.forEach(entrada=>{
+      if(entrada.isIntersecting){
+        entrada.target.classList.add('visible');
+        observador.unobserve(entrada.target);
+      }
+    });
+  },{ threshold:0.15 });
+  elementosRevelar.forEach(el=>observador.observe(el));
+
+  /* ============================================================
+     4) TOCADISCOS — reproducir / pausar "Mi Linda Esposa"
+     ============================================================ */
+  btnReproducir.addEventListener('click', function(){
+    if(audioCancion.paused){
+      audioCancion.play().catch(()=>{
+        /* Si no existe el archivo mp3, igual mostramos la animación */
+      });
+      disco.classList.add('girando');
+      tocadiscos.classList.add('reproduciendo');
+      btnReproducir.textContent = '❚❚ PAUSAR';
+    } else {
+      audioCancion.pause();
+      disco.classList.remove('girando');
+      tocadiscos.classList.remove('reproduciendo');
+      btnReproducir.textContent = '▶ REPRODUCIR';
+    }
+  });
+
+  audioCancion.addEventListener('ended', function(){
+    disco.classList.remove('girando');
+    tocadiscos.classList.remove('reproduciendo');
+    btnReproducir.textContent = '▶ REPRODUCIR';
+  });
+
+  /* ============================================================
+     5) BOTONES DE ASISTENCIA
+     ============================================================ */
+  const botonesAsistencia = document.querySelectorAll('.opcion-btn');
+  const inputAsistencia = document.getElementById('asistencia');
+  botonesAsistencia.forEach(boton=>{
+    boton.addEventListener('click', ()=>{
+      botonesAsistencia.forEach(b=>b.classList.remove('activa'));
+      boton.classList.add('activa');
+      inputAsistencia.value = boton.dataset.valor;
+    });
+  });
+
+  /* ============================================================
+     6) ENVÍO DEL FORMULARIO (demo — solo muestra confirmación)
+     ============================================================ */
+  document.getElementById('formRSVP').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!inputAsistencia.value){
+      alert('Por favor selecciona si nos acompañarás.');
+      return;
+    }
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const acompanantes = document.getElementById('acompanantes').value;
+    const mensaje = document.getElementById('mensaje').value.trim();
+
+    const texto = encodeURIComponent(
+      'Hola, quiero confirmar mi asistencia.\n\n' +
+      `Nombre: ${nombre}\n` +
+      `Asistencia: ${inputAsistencia.value === 'si' ? 'Sí asistiré' : 'No podré asistir'}\n` +
+      `Número de personas: ${acompanantes || 0}\n` +
+      `Mensaje: ${mensaje || 'Sin mensaje'}`
+    );
+
+    // Abre WhatsApp del dueño con el mensaje ya escrito para que llegue directo al teléfono.
+    window.open(`https://wa.me/525515770634?text=${texto}`, '_blank');
+
+    this.style.display = 'none';
+    document.getElementById('mensajeConfirmado').classList.add('visible');
+  });
+</script>
+
+</body>
+</html>
