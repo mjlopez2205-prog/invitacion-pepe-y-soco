@@ -3,5 +3,6 @@
   "gitdoc.autoCommitDelay": 1000,
   "gitdoc.autoPush": "onCommit",
   "gitdoc.pushMode": "push",
+  "gitdoc.commitValidationLevel": "none",
   "gitdoc.filePattern": "**/*"
 }
